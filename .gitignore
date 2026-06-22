@@ -9,6 +9,8 @@ build/**
 build-*/
 install/
 
+math-c/**
+
 # Go
 *.test
 *.out

@@ -1,0 +1,31 @@
+/**
+ * @file bench_math.c
+ * @brief math module benchmark entry point
+ *
+ * This file serves as the main benchmark registration point for the math module.
+ * Individual benchmark modules are in separate files:
+ */
+
+#include "bench_framework.h"
+#include <simd_detect.h>
+#include <stdio.h>
+
+/* External benchmark functions from sub-modules */
+extern void bench_xxx_run(void);
+
+/* Entry point for math benchmarks */
+void bench_math_run(void) {
+    printf("\n");
+    printf("============================================================\n");
+    printf("  math Module Performance Benchmarks\n");
+    printf("  SIMD level: %s\n", fc_simd_level_string(fc_get_simd_level()));
+    printf("============================================================\n");
+
+    /* Run all sub-module benchmarks */
+    bench_xxx_run();
+
+    printf("\n");
+    printf("============================================================\n");
+    printf("  math benchmarks complete\n");
+    printf("============================================================\n");
+}
