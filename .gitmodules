@@ -4,3 +4,6 @@
 [submodule "modules/ds"]
 	path = modules/ds
 	url = https://github.com/finosorg-labs/ds.git
+[submodule "modules/stats"]
+	path = modules/stats
+	url = https://github.com/finosorg-labs/stats.git
