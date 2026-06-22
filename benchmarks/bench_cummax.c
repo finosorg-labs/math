@@ -26,7 +26,7 @@ static void run_bench_cummax_f64(const char* name, size_t n) {
     ctx.output = (double*)malloc(n * sizeof(double));
 
     for (size_t i = 0; i < n; i++) {
-        ctx.input[i] = (double)(rand() % 1000);
+        ctx.input[i] = (double)(i % 1000);
     }
 
     fc_bench_config_t config = FC_BENCH_CONFIG_DEFAULT;
@@ -49,7 +49,7 @@ static void run_bench_cummax_f32(const char* name, size_t n) {
     ctx.output = (double*)malloc(n * sizeof(float));
 
     for (size_t i = 0; i < n; i++) {
-        ((float*)ctx.input)[i] = (float)(rand() % 1000);
+        ((float*)ctx.input)[i] = (float)(i % 1000);
     }
 
     fc_bench_config_t config = FC_BENCH_CONFIG_DEFAULT;
