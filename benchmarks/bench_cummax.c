@@ -1,5 +1,6 @@
 #include "cummax.h"
 #include "bench_framework.h"
+#include "mem_aligned.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -22,8 +23,8 @@ static void bench_cummax_f32_func(void* user_data) {
 static void run_bench_cummax_f64(const char* name, size_t n) {
     bench_cummax_ctx_t ctx;
     ctx.n = n;
-    ctx.input = (double*)malloc(n * sizeof(double));
-    ctx.output = (double*)malloc(n * sizeof(double));
+    ctx.input = (double*)fc_aligned_alloc_double(n);
+    ctx.output = (double*)fc_aligned_alloc_double(n);
 
     for (size_t i = 0; i < n; i++) {
         ctx.input[i] = (double)(i % 1000);
@@ -38,15 +39,15 @@ static void run_bench_cummax_f64(const char* name, size_t n) {
     fc_bench_result_t result;
     fc_bench_run(&config, bench_cummax_f64_func, &ctx, &result);
 
-    free(ctx.input);
-    free(ctx.output);
+    fc_aligned_free(ctx.input);
+    fc_aligned_free(ctx.output);
 }
 
 static void run_bench_cummax_f32(const char* name, size_t n) {
     bench_cummax_ctx_t ctx;
     ctx.n = n;
-    ctx.input = (double*)malloc(n * sizeof(float));
-    ctx.output = (double*)malloc(n * sizeof(float));
+    ctx.input = (double*)fc_aligned_alloc_float(n);
+    ctx.output = (double*)fc_aligned_alloc_float(n);
 
     for (size_t i = 0; i < n; i++) {
         ((float*)ctx.input)[i] = (float)(i % 1000);
@@ -61,8 +62,8 @@ static void run_bench_cummax_f32(const char* name, size_t n) {
     fc_bench_result_t result;
     fc_bench_run(&config, bench_cummax_f32_func, &ctx, &result);
 
-    free(ctx.input);
-    free(ctx.output);
+    fc_aligned_free(ctx.input);
+    fc_aligned_free(ctx.output);
 }
 
 void bench_cummax_run(void) {
