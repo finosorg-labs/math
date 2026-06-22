@@ -1,0 +1,3 @@
+get_filename_component(finkit-math_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+include(CMakeFindDependencyMacro)
+include("${finkit-math_CMAKE_DIR}/finkit-mathTargets.cmake")

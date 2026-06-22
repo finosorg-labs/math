@@ -22,7 +22,6 @@ package math
 
 #include "cumsum.h"
 #include "cummax.h"
-*/
 
 // Platform sources (dependency)
 #include "simd_detect.c"
