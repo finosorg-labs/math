@@ -25,6 +25,8 @@ target_link_libraries(bench_framework
 add_executable(math_benchmarks
     bench_main.c
     bench_math.c
+    bench_cumsum.c
+    bench_cummax.c
 )
 
 # Link with benchmark framework and math library

@@ -9,10 +9,12 @@
 #include "test_framework.h"
 
 /* External test registration functions from sub-modules */
-extern void register_xxx_tests(void);
+extern void register_cumsum_tests(void);
+extern void register_cummax_tests(void);
 
 /* Entry point for math tests */
 void register_math_tests(void) {
     /* Register all sub-module tests */
-    register_xxx_tests();
+    register_cumsum_tests();
+    register_cummax_tests();
 }

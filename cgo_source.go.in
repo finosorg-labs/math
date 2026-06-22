@@ -20,7 +20,9 @@ package math
 #cgo windows LDFLAGS: ${SRCDIR}/modules/platform/build/windows_amd64/libfinkit_platform_static.a -lm
 
 
-#include "xxx.h"
+#include "cumsum.h"
+#include "cummax.h"
+*/
 
 // Platform sources (dependency)
 #include "simd_detect.c"
@@ -42,7 +44,8 @@ package math
 #endif
 
 // math sources
-#include "math-c/xxx.c"
+#include "math-c/cumsum.c"
+#include "math-c/cummax.c"
 */
 import "C"
 

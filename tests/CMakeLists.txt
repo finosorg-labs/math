@@ -6,6 +6,8 @@
 add_executable(math_tests
     test_framework.c
     test_main.c
+    test_cumsum.c
+    test_cummax.c
 )
 
 # Link with math library

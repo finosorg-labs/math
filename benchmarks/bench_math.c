@@ -11,7 +11,8 @@
 #include <stdio.h>
 
 /* External benchmark functions from sub-modules */
-extern void bench_xxx_run(void);
+extern void bench_cumsum_run(void);
+extern void bench_cummax_run(void);
 
 /* Entry point for math benchmarks */
 void bench_math_run(void) {
@@ -22,7 +23,8 @@ void bench_math_run(void) {
     printf("============================================================\n");
 
     /* Run all sub-module benchmarks */
-    bench_xxx_run();
+    bench_cumsum_run();
+    bench_cummax_run();
 
     printf("\n");
     printf("============================================================\n");
