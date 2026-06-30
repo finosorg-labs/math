@@ -33,6 +33,8 @@ package math
 
 #include "cumsum.h"
 #include "cummax.h"
+#include "exp.h"
+#include "log.h"
 
 // Platform sources (dependency)
 #include "simd_detect.c"
@@ -56,6 +58,8 @@ package math
 // math sources
 #include "math-c/cumsum.c"
 #include "math-c/cummax.c"
+#include "math-c/exp.c"
+#include "math-c/log.c"
 */
 import "C"
 

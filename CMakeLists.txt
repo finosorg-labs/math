@@ -119,6 +119,8 @@ endif()
 set(MATH_SOURCES
     math-c/cumsum.c
     math-c/cummax.c
+    math-c/exp.c
+    math-c/log.c
 )
 
 # Create object library
@@ -138,12 +140,18 @@ target_compile_definitions(finkit_math PRIVATE FC_STATIC_BUILD)
 if(FC_SIMD_LEVEL STREQUAL "AVX512")
     set_source_files_properties(math-c/cumsum.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
     set_source_files_properties(math-c/cummax.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
+    set_source_files_properties(math-c/exp.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
+    set_source_files_properties(math-c/log.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
 elseif(FC_SIMD_LEVEL STREQUAL "AVX2")
     set_source_files_properties(math-c/cumsum.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
     set_source_files_properties(math-c/cummax.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
+    set_source_files_properties(math-c/exp.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
+    set_source_files_properties(math-c/log.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
 elseif(FC_SIMD_LEVEL STREQUAL "SSE42")
     set_source_files_properties(math-c/cumsum.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
     set_source_files_properties(math-c/cummax.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
+    set_source_files_properties(math-c/exp.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
+    set_source_files_properties(math-c/log.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
 endif()
 
 # Create base static library (without platform)

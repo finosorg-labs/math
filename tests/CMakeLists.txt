@@ -9,6 +9,8 @@ add_executable(math_tests
     test_math.c
     test_cumsum.c
     test_cummax.c
+    test_exp.c
+    test_log.c
 )
 
 # Link with math library

@@ -13,6 +13,8 @@
 /* External benchmark functions from sub-modules */
 extern void bench_cumsum_run(void);
 extern void bench_cummax_run(void);
+extern void bench_exp_run(void);
+extern void bench_log_run(void);
 
 /* Entry point for math benchmarks */
 void bench_math_run(void) {
@@ -25,6 +27,8 @@ void bench_math_run(void) {
     /* Run all sub-module benchmarks */
     bench_cumsum_run();
     bench_cummax_run();
+    bench_exp_run();
+    bench_log_run();
 
     printf("\n");
     printf("============================================================\n");

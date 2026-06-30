@@ -27,6 +27,8 @@ add_executable(math_benchmarks
     bench_math.c
     bench_cumsum.c
     bench_cummax.c
+    bench_exp.c
+    bench_log.c
 )
 
 # Link with benchmark framework and math library
