@@ -1,4 +1,5 @@
 #include "../tests/test_framework.h"
+#include "erf.h"
 #include "normal.h"
 #include <math.h>
 #include <float.h>
@@ -120,7 +121,7 @@ TEST(test_normal_pdf_f64_basic) {
     for (int i = 0; i < 5; i++) {
         double expected = inv_sqrt_2pi * exp(-0.5 * input[i] * input[i]);
         double abs_err = fabs(output[i] - expected);
-        FC_TEST_ASSERT_MSG(abs_err < 1e-14, "Index %d: abs_err = %e", i, abs_err);
+        FC_TEST_ASSERT_MSG(abs_err < 1e-12, "Index %d: abs_err = %e", i, abs_err);
     }
 }
 

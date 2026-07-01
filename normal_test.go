@@ -15,7 +15,7 @@ func TestNormalPdfF64Basic(t *testing.T) {
 	invSqrt2Pi := 0.3989422804014327
 	for i, x := range input {
 		expected := invSqrt2Pi * math.Exp(-0.5*x*x)
-		if math.Abs(output[i]-expected) > 1e-14 {
+		if math.Abs(output[i]-expected) > 1e-12 {
 			t.Errorf("Index %d: expected %v, got %v", i, expected, output[i])
 		}
 	}

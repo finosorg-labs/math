@@ -1,3 +1,4 @@
+#include "erf.h"
 #include "normal.h"
 #include "bench_framework.h"
 #include "mem_aligned.h"

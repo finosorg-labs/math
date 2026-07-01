@@ -13,6 +13,8 @@ extern "C" {
  * Computes erf(x) = (2/√π) * ∫[0,x] exp(-t²) dt using Abramowitz and Stegun
  * approximation. Achieves maximum error < 1.5e-7 across the entire range.
  *
+ * For higher precision requirements, use platform layer's fc_bigfloat_erf().
+ *
  * @param input Input array
  * @param output Output array (erf values)
  * @param n Number of elements

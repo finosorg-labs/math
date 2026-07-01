@@ -19,8 +19,7 @@ add_executable(math_tests
 target_link_libraries(math_tests
     PRIVATE
         finkit_math_static_base
-     finkit::ds
-        finkit::platform
+        finkit::ds
         m
 )
 
