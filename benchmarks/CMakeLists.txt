@@ -30,6 +30,7 @@ add_executable(math_benchmarks
     bench_log.c
     bench_erf.c
     bench_normal.c
+    bench_normal_inv.c
 )
 
 # Link with benchmark framework and math library

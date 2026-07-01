@@ -15,6 +15,7 @@ extern void register_exp_tests(void);
 extern void register_log_tests(void);
 extern void register_erf_tests(void);
 extern void register_normal_tests(void);
+extern void register_normal_inv_tests(void);
 
 /* Entry point for math tests */
 void register_math_tests(void) {
@@ -25,4 +26,5 @@ void register_math_tests(void) {
     register_log_tests();
     register_erf_tests();
     register_normal_tests();
+    register_normal_inv_tests();
 }

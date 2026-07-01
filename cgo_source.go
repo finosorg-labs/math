@@ -37,6 +37,7 @@ package math
 #include "log.h"
 #include "erf.h"
 #include "normal.h"
+#include "normal_inv.h"
 
 // Platform sources (dependency)
 #include "simd_detect.c"
@@ -64,6 +65,7 @@ package math
 #include "math-c/log.c"
 #include "math-c/erf.c"
 #include "math-c/normal.c"
+#include "math-c/normal_inv.c"
 */
 import "C"
 

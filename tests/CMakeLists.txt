@@ -13,6 +13,7 @@ add_executable(math_tests
     test_log.c
     test_erf.c
     test_normal.c
+    test_normal_inv.c
 )
 
 # Link with math library

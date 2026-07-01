@@ -123,6 +123,7 @@ set(MATH_SOURCES
     math-c/log.c
     math-c/erf.c
     math-c/normal.c
+    math-c/normal_inv.c
 )
 
 # Create object library
@@ -146,6 +147,7 @@ if(FC_SIMD_LEVEL STREQUAL "AVX512")
     set_source_files_properties(math-c/log.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
     set_source_files_properties(math-c/erf.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
     set_source_files_properties(math-c/normal.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
+    set_source_files_properties(math-c/normal_inv.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
 elseif(FC_SIMD_LEVEL STREQUAL "AVX2")
     set_source_files_properties(math-c/cumsum.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
     set_source_files_properties(math-c/cummax.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
@@ -153,6 +155,7 @@ elseif(FC_SIMD_LEVEL STREQUAL "AVX2")
     set_source_files_properties(math-c/log.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
     set_source_files_properties(math-c/erf.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
     set_source_files_properties(math-c/normal.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
+    set_source_files_properties(math-c/normal_inv.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
 elseif(FC_SIMD_LEVEL STREQUAL "SSE42")
     set_source_files_properties(math-c/cumsum.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
     set_source_files_properties(math-c/cummax.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
@@ -160,6 +163,7 @@ elseif(FC_SIMD_LEVEL STREQUAL "SSE42")
     set_source_files_properties(math-c/log.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
     set_source_files_properties(math-c/erf.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
     set_source_files_properties(math-c/normal.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
+    set_source_files_properties(math-c/normal_inv.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
 endif()
 
 # Create base static library (without platform)
