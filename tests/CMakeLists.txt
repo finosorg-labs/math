@@ -11,6 +11,8 @@ add_executable(math_tests
     test_cummax.c
     test_exp.c
     test_log.c
+    test_erf.c
+    test_normal.c
 )
 
 # Link with math library

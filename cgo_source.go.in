@@ -35,6 +35,8 @@ package math
 #include "cummax.h"
 #include "exp.h"
 #include "log.h"
+#include "erf.h"
+#include "normal.h"
 
 // Platform sources (dependency)
 #include "simd_detect.c"
@@ -60,6 +62,8 @@ package math
 #include "math-c/cummax.c"
 #include "math-c/exp.c"
 #include "math-c/log.c"
+#include "math-c/erf.c"
+#include "math-c/normal.c"
 */
 import "C"
 

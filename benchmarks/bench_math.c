@@ -15,6 +15,8 @@ extern void bench_cumsum_run(void);
 extern void bench_cummax_run(void);
 extern void bench_exp_run(void);
 extern void bench_log_run(void);
+extern void bench_erf_run(void);
+extern void bench_normal_run(void);
 
 /* Entry point for math benchmarks */
 void bench_math_run(void) {
@@ -29,6 +31,8 @@ void bench_math_run(void) {
     bench_cummax_run();
     bench_exp_run();
     bench_log_run();
+    bench_erf_run();
+    bench_normal_run();
 
     printf("\n");
     printf("============================================================\n");
