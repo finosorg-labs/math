@@ -58,7 +58,6 @@ int fc_math_normal_inv_f64(const double* input, double* output, size_t n);
  * Space complexity: O(1) auxiliary space
  */
 int fc_math_normal_inv_bsm_f64(const double* input, double* output, size_t n);
-int fc_math_normal_inv_f64(const double* input, double* output, size_t n);
 
 /**
  * @brief Compute inverse standard normal CDF for float32 array

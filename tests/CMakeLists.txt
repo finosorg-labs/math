@@ -14,6 +14,8 @@ add_executable(math_tests
     test_erf.c
     test_normal.c
     test_normal_inv.c
+    test_sqrt.c
+    test_pow.c
 )
 
 # Link with math library

@@ -31,6 +31,8 @@ add_executable(math_benchmarks
     bench_erf.c
     bench_normal.c
     bench_normal_inv.c
+    bench_sqrt.c
+    bench_pow.c
 )
 
 # Link with benchmark framework and math library

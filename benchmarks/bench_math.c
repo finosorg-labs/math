@@ -18,6 +18,8 @@ extern void bench_log_run(void);
 extern void bench_erf_run(void);
 extern void bench_normal_run(void);
 extern void bench_normal_inv_run(void);
+extern void bench_sqrt_run(void);
+extern void bench_pow_run(void);
 
 /* Entry point for math benchmarks */
 void bench_math_run(void) {
@@ -35,6 +37,8 @@ void bench_math_run(void) {
     bench_erf_run();
     bench_normal_run();
     bench_normal_inv_run();
+    bench_sqrt_run();
+    bench_pow_run();
 
     printf("\n");
     printf("============================================================\n");
