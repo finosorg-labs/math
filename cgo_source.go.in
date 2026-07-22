@@ -41,24 +41,6 @@ package math
 #include "sqrt.h"
 #include "pow.h"
 
-// Platform sources (dependency)
-#include "simd_detect.c"
-#include "fc_bignum_init.c"
-#include "fc_bigint.c"
-#include "fc_bigfloat.c"
-#include "fc_precision.c"
-#include "mem_aligned.c"
-#include "error.c"
-#include "fc_init.c"
-
-// Platform-specific sources
-#if defined(__linux__)
-  #include "modules/platform/src/platform_linux.c"
-#elif defined(__APPLE__)
-  #include "modules/platform/src/platform_macos.c"
-#elif defined(_WIN32)
-  #include "modules/platform/src/platform_win.c"
-#endif
 
 // math sources
 #include "math-c/cumsum.c"

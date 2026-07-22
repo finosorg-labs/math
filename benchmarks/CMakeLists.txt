@@ -14,12 +14,6 @@ target_include_directories(bench_framework
         ${CMAKE_SOURCE_DIR}/modules/platform/include
 )
 
-target_link_libraries(bench_framework
-    PUBLIC
-        finkit_math_static_base
-        finkit::ds
-)
-
 # Benchmark executable
 add_executable(math_benchmarks
     bench_main.c
@@ -35,12 +29,11 @@ add_executable(math_benchmarks
     bench_pow.c
 )
 
-# Link with benchmark framework and math library
+# Link with benchmark framework and merged math library
 target_link_libraries(math_benchmarks
     PRIVATE
         bench_framework
-        finkit_math_static_base
-        finkit::ds
+        finkit_math_static_interface
         m
 )
 

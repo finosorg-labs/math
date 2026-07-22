@@ -4,6 +4,10 @@ project(finkit-math VERSION 1.0.0 LANGUAGES C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+# Build options (must be before add_subdirectory calls)
+option(FC_BUILD_TESTS "Build tests" ON)
+option(FC_BUILD_BENCHMARKS "Build benchmarks" ON)
+
 # Include SIMD detection and compiler flags
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/DetectSIMD.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerFlags.cmake)
@@ -31,151 +35,12 @@ configure_file(
     @ONLY
 )
 
-# Use prebuilt platform library
-if(NOT TARGET finkit::platform)
-    # Detect platform
-    if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-        if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
-            set(PLATFORM_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/platform/build/darwin_arm64")
-        else()
-            set(PLATFORM_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/platform/build/darwin_x86_64")
-        endif()
-    elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-        set(PLATFORM_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/platform/build/linux_amd64")
-    elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-        set(PLATFORM_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/platform/build/windows_amd64")
-    else()
-        message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
-    endif()
 
-    # Import prebuilt platform library
-    add_library(finkit_platform_static STATIC IMPORTED)
-    set_target_properties(finkit_platform_static PROPERTIES
-        IMPORTED_LOCATION "${PLATFORM_BUILD_DIR}/libfinkit_platform_static.a"
-    )
-    target_include_directories(finkit_platform_static INTERFACE
-        "${CMAKE_CURRENT_SOURCE_DIR}/modules/platform/include"
-    )
-    add_library(finkit::platform ALIAS finkit_platform_static)
-endif()
-
-# Use prebuilt ds library
-if(NOT TARGET finkit::ds)
-    # Detect platform for ds
-    if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-        if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
-            set(DS_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/ds/build/darwin_arm64")
-        else()
-        set(DS_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/ds/build/darwin_x86_64")
-        endif()
-    elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-        set(DS_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/ds/build/linux_amd64")
-    elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-        set(DS_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/ds/build/windows_amd64")
-    else()
-        message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
-    endif()
-
-    # Import prebuilt ds library
-    add_library(finkit_ds_static STATIC IMPORTED)
-    set_target_properties(finkit_ds_static PROPERTIES
-        IMPORTED_LOCATION "${DS_BUILD_DIR}/libfinkit_ds_static.a"
-    )
-    target_include_directories(finkit_ds_static INTERFACE
-        "${CMAKE_CURRENT_SOURCE_DIR}/modules/ds/include"
-    )
-    add_library(finkit::ds ALIAS finkit_ds_static)
-endif()
-
-# Use prebuilt stats library
-if(NOT TARGET finkit::stats)
-    # Detect platform for stats
-    if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-        if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
-            set(STATS_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/stats/build/darwin_arm64")
-        else()
-            set(STATS_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/stats/build/darwin_x86_64")
-        endif()
-    elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-        set(STATS_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/stats/build/linux_amd64")
-    elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-        set(STATS_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/stats/build/windows_amd64")
-    else()
-        message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
-    endif()
-
-    # Import prebuilt stats library
-    add_library(finkit_stats_static STATIC IMPORTED)
-    set_target_properties(finkit_stats_static PROPERTIES
-        IMPORTED_LOCATION "${STATS_BUILD_DIR}/libfinkit_stats_static.a"
-    )
-    target_include_directories(finkit_stats_static INTERFACE
-        "${CMAKE_CURRENT_SOURCE_DIR}/modules/stats/include"
-    )
-    add_library(finkit::stats ALIAS finkit_stats_static)
-endif()
-
-# math module sources
-set(MATH_SOURCES
-    math-c/cumsum.c
-    math-c/cummax.c
-    math-c/exp.c
-    math-c/log.c
-    math-c/erf.c
-    math-c/normal.c
-    math-c/normal_inv.c
-    math-c/sqrt.c
-    math-c/pow.c
-)
-
-# Create object library
-add_library(finkit_math OBJECT ${MATH_SOURCES})
-
-target_include_directories(finkit_math
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/platform/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/stats/include>
-        $<INSTALL_INTERFACE:include>
-)
-
-target_compile_definitions(finkit_math PRIVATE FC_STATIC_BUILD)
-
-# Set compile flags for SIMD variants based on detected level
-if(FC_SIMD_LEVEL STREQUAL "AVX512")
-    set_source_files_properties(math-c/cumsum.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
-    set_source_files_properties(math-c/cummax.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
-    set_source_files_properties(math-c/exp.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
-    set_source_files_properties(math-c/log.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
-    set_source_files_properties(math-c/erf.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
-    set_source_files_properties(math-c/normal.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
-    set_source_files_properties(math-c/normal_inv.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
-    set_source_files_properties(math-c/sqrt.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
-    set_source_files_properties(math-c/pow.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
-elseif(FC_SIMD_LEVEL STREQUAL "AVX2")
-    set_source_files_properties(math-c/cumsum.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
-    set_source_files_properties(math-c/cummax.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
-    set_source_files_properties(math-c/exp.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
-    set_source_files_properties(math-c/log.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
-    set_source_files_properties(math-c/erf.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
-    set_source_files_properties(math-c/normal.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
-    set_source_files_properties(math-c/normal_inv.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
-    set_source_files_properties(math-c/sqrt.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
-    set_source_files_properties(math-c/pow.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
-elseif(FC_SIMD_LEVEL STREQUAL "SSE42")
-    set_source_files_properties(math-c/cumsum.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
-    set_source_files_properties(math-c/cummax.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
-    set_source_files_properties(math-c/exp.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
-    set_source_files_properties(math-c/log.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
-    set_source_files_properties(math-c/erf.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
-    set_source_files_properties(math-c/normal.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
-    set_source_files_properties(math-c/normal_inv.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
-    set_source_files_properties(math-c/sqrt.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
-    set_source_files_properties(math-c/pow.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
-endif()
+# Build math-c subdirectory (creates math_obj target)
+add_subdirectory(math-c)
 
 # Create base static library (without platform)
-add_library(finkit_math_static_base STATIC $<TARGET_OBJECTS:finkit_math>)
+add_library(finkit_math_static_base STATIC $<TARGET_OBJECTS:math_obj>)
 target_include_directories(finkit_math_static_base
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -195,68 +60,45 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     set(MATH_BUILD_DIR "windows_amd64")
 endif()
 
-# Merge static libraries into a single library
-set(MERGED_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build/${MATH_BUILD_DIR}/libfinkit_math_static.a)
-set(PLATFORM_LIB_PATH "${PLATFORM_BUILD_DIR}/libfinkit_platform_static.a")
-set(DS_LIB_PATH "${DS_BUILD_DIR}/libfinkit_ds_static.a")
-set(STATS_LIB_PATH "${STATS_BUILD_DIR}/libfinkit_stats_static.a")
+# Merge static libraries with deduplication
+# Use build-specific path to avoid conflicts between different build types (sanitizers)
+set(MERGED_LIB_PATH ${CMAKE_CURRENT_BINARY_DIR}/libfinkit_math_static.a)
+# Fixed path for Go cgo bindings
+set(FINAL_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build/${MATH_BUILD_DIR}/libfinkit_math_static.a)
 
+# Determine merge tool based on platform
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    # Windows: use lib.exe to merge libraries
-    add_custom_command(
-        OUTPUT ${MERGED_LIB_PATH}
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/build/${MATH_BUILD_DIR}
-        COMMAND lib.exe /OUT:${MERGED_LIB_PATH}
-            $<TARGET_FILE:finkit_math_static_base>
-            ${DS_LIB_PATH}
-            ${STATS_LIB_PATH}
-            ${PLATFORM_LIB_PATH}
-        DEPENDS finkit_math_static_base ${DS_LIB_PATH} ${STATS_LIB_PATH} ${PLATFORM_LIB_PATH}
-        COMMENT "Merging static libraries into ${MERGED_LIB_PATH}"
-        VERBATIM
-    )
+    set(MERGE_TOOL "lib.exe")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    # macOS: use libtool to merge libraries
-    add_custom_command(
-        OUTPUT ${MERGED_LIB_PATH}
-      COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/build/${MATH_BUILD_DIR}
-      COMMAND libtool -static -o ${MERGED_LIB_PATH}
-            $<TARGET_FILE:finkit_math_static_base>
-            ${DS_LIB_PATH}
-            ${STATS_LIB_PATH}
-            ${PLATFORM_LIB_PATH}
-            2>&1 | grep -v "warning duplicate member name" || true
-        DEPENDS finkit_math_static_base ${DS_LIB_PATH} ${STATS_LIB_PATH} ${PLATFORM_LIB_PATH}
-        COMMENT "Merging static libraries into ${MERGED_LIB_PATH}"
-        VERBATIM
-    )
+    set(MERGE_TOOL "libtool")
 else()
-    # Linux: use ar with MRI script to merge libraries
-    set(MRI_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/merge_libs.mri)
-    file(GENERATE OUTPUT ${MRI_SCRIPT} CONTENT
-"CREATE ${MERGED_LIB_PATH}
-ADDLIB $<TARGET_FILE:finkit_math_static_base>
-ADDLIB ${DS_LIB_PATH}
-ADDLIB ${STATS_LIB_PATH}
-ADDLIB ${PLATFORM_LIB_PATH}
-SAVE
-END
-")
-
-    add_custom_command(
-      OUTPUT ${MERGED_LIB_PATH}
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/build/${MATH_BUILD_DIR}
-        COMMAND ${CMAKE_AR} -M < ${MRI_SCRIPT}
-      DEPENDS finkit_math_static_base ${DS_LIB_PATH} ${STATS_LIB_PATH} ${PLATFORM_LIB_PATH} ${MRI_SCRIPT}
-        COMMENT "Merging static libraries into ${MERGED_LIB_PATH}"
-      VERBATIM
-    )
+    set(MERGE_TOOL "${CMAKE_AR}")
 endif()
+
+# Unified merge command for all platforms
+set(MERGE_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/scripts/merge_libs.sh)
+
+add_custom_command(
+    OUTPUT ${MERGED_LIB_PATH}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/build/${MATH_BUILD_DIR}
+    COMMAND bash ${MERGE_SCRIPT}
+        ${MERGED_LIB_PATH}
+        $<TARGET_FILE:finkit_math_static_base>
+        ${MERGE_TOOL}
+        --mode=smart
+        --project-root=${CMAKE_CURRENT_SOURCE_DIR}
+        --build-subdir=${MATH_BUILD_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${MERGED_LIB_PATH} ${FINAL_LIB_PATH}
+    DEPENDS finkit_math_static_base ${MERGE_SCRIPT}
+    COMMENT "Merging static libraries with smart deduplication"
+    VERBATIM
+)
 
 # Create custom target to trigger the merge
 add_custom_target(finkit_math_static ALL
     DEPENDS ${MERGED_LIB_PATH}
     COMMAND ${CMAKE_COMMAND} -E echo "Merged library created at: ${MERGED_LIB_PATH}"
+    COMMAND ${CMAKE_COMMAND} -E echo "Final library for Go: ${FINAL_LIB_PATH}"
 )
 
 # Create interface library for linking
@@ -268,8 +110,8 @@ target_include_directories(finkit_math_static_interface
 )
 target_link_libraries(finkit_math_static_interface
     INTERFACE
-        m
         ${MERGED_LIB_PATH}
+        m
 )
 
 # Create alias
@@ -316,15 +158,14 @@ install(FILES
     DESTINATION lib/cmake/finkit-math
 )
 
+
 # Tests
-option(FC_BUILD_TESTS "Build tests" ON)
 if(FC_BUILD_TESTS AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/tests)
     enable_testing()
     add_subdirectory(tests)
 endif()
 
 # Benchmarks
-option(FC_BUILD_BENCHMARKS "Build benchmarks" ON)
 if(FC_BUILD_BENCHMARKS AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/benchmarks)
     add_subdirectory(benchmarks)
 endif()

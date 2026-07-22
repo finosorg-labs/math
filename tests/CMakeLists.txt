@@ -18,11 +18,10 @@ add_executable(math_tests
     test_pow.c
 )
 
-# Link with math library
+# Link with merged math library (includes all dependencies)
 target_link_libraries(math_tests
     PRIVATE
-        finkit_math_static_base
-        finkit::ds
+        finkit_math_static_interface
         m
 )
 
